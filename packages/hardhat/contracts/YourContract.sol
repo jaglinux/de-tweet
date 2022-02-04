@@ -21,6 +21,10 @@ contract YourContract {
     mapping(uint256 => tweet) public gTweets;
     uint256 public gTweetsCount;
 
+    /** 
+     * @dev Function to tweet, called by user only
+     * @param _message tweet message
+     */
     function fTweet(string calldata _message) external {
         tweet storage t = gTweets[gTweetsCount];
         t.message = _message;
@@ -30,27 +34,40 @@ contract YourContract {
         u.tweets.push(gTweetsCount);
         gTweetsCount += 1;
     }
-
-    function fCreateUser(string memory _name) public {
+    /** 
+     * @dev set user profile name, called by user only
+     * @param _name user profile name
+     */
+    function fCreateUserName(string memory _name) public {
         addrToUser[msg.sender].name = _name;
     }
 
-    function follow(address _dest) external {
+    /** 
+     * @dev follow another user, called by user only
+     * @param _dest follow user address
+     */
+    function fFollow(address _dest) external {
         user storage u = addrToUser[_dest];
         require(u.followers[msg.sender] == false, "Already Following");
         u.followers[msg.sender] = true;
         u.idToFollower[u.followers_count] = msg.sender;
         u.followers_count += 1;
     }
-
-    function flike(uint256 _index) external {
+    /** 
+     * @dev like tweet, called by user only
+     * @param _index tweet index
+     */
+    function fLike(uint256 _index) external {
         tweet storage t = gTweets[_index];
         require(t.liker[msg.sender] == false, "Already Liked");
         t.liker[msg.sender] = true;
         t.idToLiker[t.likes_count] = msg.sender;
         t.likes_count += 1;
     }
-
+    /** 
+     * @dev get followers for a user, anyone can call
+     * @param _addr user address
+     */
     function getFollowers(address _addr) external view returns(address[] memory) {
         user storage u = addrToUser[_addr];
         uint256 len = u.followers_count;
@@ -60,7 +77,10 @@ contract YourContract {
         }
         return a;
     }
-
+    /** 
+     * @dev get likes for a tweet, anyone can call
+     * @param _index tweet index
+     */
     function getLikes(uint256 _index) external view returns(address[] memory) {
         require(_index < gTweetsCount, "invalid Tweet id");
         tweet storage t = gTweets[_index];
