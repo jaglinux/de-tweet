@@ -2,11 +2,9 @@
 
 This project aims to develop the decentralized version of social media- Twitter. 
 
-Basic features like tweeting, liking tweet, creating user profile , following other users etc 
+Basic salient features like tweeting, liking a tweet, following other users,creating user profile etc are included in the first release of this project.
 
-are slated for the MVP.
-
-Built on top of Scaffold-Eth
+The project is built on top of Scaffold-Eth with smart contract developed using Solidity.
 
 
 # 🏗 Scaffold-ETH
