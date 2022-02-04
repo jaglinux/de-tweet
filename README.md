@@ -1,3 +1,11 @@
+This project aims to develop the decentralized version of social media- Twitter. 
+
+Basic features like tweeting, liking tweet, creating user profile , following other users etc 
+
+are slated for the MVP
+
+
+
 # 🏗 Scaffold-ETH
 
 > everything you need to build on Ethereum! 🚀
