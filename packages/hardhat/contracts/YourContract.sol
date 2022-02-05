@@ -5,75 +5,75 @@ contract YourContract {
     struct tweet {
         string message;
         address owner;
-        uint256 likes_count;
-        mapping(address => bool) liker;
-        mapping(uint256 => address) idToLiker;
+        uint256 numberOfLikes;
+        mapping(address => bool) isLiker;
+        mapping(uint256 => address) idToLikerAddress;
     }
     struct user {
         string name;
-        uint256 tweets_count;
-        uint256 followers_count;
-        uint256[] tweets;
-        mapping(address => bool) followers;
-        mapping(uint256 => address) idToFollower;
+        uint256 numberOfTweets;
+        uint256 numberOfFollowers;
+        uint256[] tweetsList;
+        mapping(address => bool) isFollower;
+        mapping(uint256 => address) idToFollowerAddress;
     }
-    mapping(address => user) public addrToUser;
-    mapping(uint256 => tweet) public gTweets;
-    uint256 public gTweetsCount;
+    mapping(address => user) public addressToUser;
+    mapping(uint256 => tweet) public tweetsList;
+    uint256 public numberOfTweets;
 
     /** 
      * @dev Function to tweet, called by user only
      * @param _message tweet message
      */
-    function fTweet(string calldata _message) external {
-        tweet storage t = gTweets[gTweetsCount];
+    function Tweet(string calldata _message) external {
+        tweet storage t = tweetsList[numberOfTweets];
         t.message = _message;
         t.owner = msg.sender;
-        user storage u = addrToUser[msg.sender];
-        u.tweets_count += 1;
-        u.tweets.push(gTweetsCount);
-        gTweetsCount += 1;
+        user storage u = addressToUser[msg.sender];
+        u.numberOfTweets += 1;
+        u.tweetsList.push(numberOfTweets);
+        numberOfTweets += 1;
     }
     /** 
      * @dev set user profile name, called by user only
      * @param _name user profile name
      */
-    function fCreateUserName(string memory _name) public {
-        addrToUser[msg.sender].name = _name;
+    function CreateUserName(string memory _name) public {
+        addressToUser[msg.sender].name = _name;
     }
 
     /** 
      * @dev follow another user, called by user only
      * @param _dest follow user address
      */
-    function fFollow(address _dest) external {
-        user storage u = addrToUser[_dest];
-        require(u.followers[msg.sender] == false, "Already Following");
-        u.followers[msg.sender] = true;
-        u.idToFollower[u.followers_count] = msg.sender;
-        u.followers_count += 1;
+    function FollowUser(address _dest) external {
+        user storage u = addressToUser[_dest];
+        require(u.isFollower[msg.sender] == false, "Already Following");
+        u.isFollower[msg.sender] = true;
+        u.idToFollowerAddress[u.numberOfFollowers] = msg.sender;
+        u.numberOfFollowers += 1;
     }
     /** 
      * @dev like tweet, called by user only
      * @param _index tweet index
      */
-    function fLike(uint256 _index) external {
-        tweet storage t = gTweets[_index];
-        require(t.liker[msg.sender] == false, "Already Liked");
-        t.liker[msg.sender] = true;
-        t.idToLiker[t.likes_count] = msg.sender;
-        t.likes_count += 1;
+    function LikeTweet(uint256 _index) external {
+        tweet storage t = tweetsList[_index];
+        require(t.isLiker[msg.sender] == false, "Already Liked");
+        t.isLiker[msg.sender] = true;
+        t.idToLikerAddress[t.numberOfLikes] = msg.sender;
+        t.numberOfLikes += 1;
     }
     /** 
      * @dev get followers for a user, anyone can call
      * @param _addr user address
      */
-    function getFollowers(address _addr) external view returns(address[] memory) {
-        user storage u = addrToUser[_addr];
-        uint256 len = u.followers_count;
+    function getFollowersList(address _addr) external view returns(address[] memory) {
+        user storage u = addressToUser[_addr];
+        uint256 len = u.numberOfFollowers;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
-            a[i] = u.idToFollower[i];
+            a[i] = u.idToFollowerAddress[i];
         }
         return a;
     }
@@ -81,13 +81,13 @@ contract YourContract {
      * @dev get likes for a tweet, anyone can call
      * @param _index tweet index
      */
-    function getLikes(uint256 _index) external view returns(address[] memory) {
-        require(_index < gTweetsCount, "invalid Tweet id");
-        tweet storage t = gTweets[_index];
-        uint256 len = t.likes_count;
+    function getLikesList(uint256 _index) external view returns(address[] memory) {
+        require(_index < numberOfTweets, "invalid Tweet id");
+        tweet storage t = tweetsList[_index];
+        uint256 len = t.numberOfLikes;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
-            a[i] = t.idToLiker[i];
+            a[i] = t.idToLikerAddress[i];
         }
         return a;
     }
