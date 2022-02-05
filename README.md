@@ -6,6 +6,7 @@ Basic salient features like tweeting, liking a tweet, following other users,crea
 
 The project is built on top of Scaffold-Eth with smart contract developed using Solidity.
 
+Mumbai Test Network : https://detweettest.surge.sh/
 
 # 🏗 Scaffold-ETH
 
