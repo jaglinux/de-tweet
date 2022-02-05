@@ -1,3 +1,13 @@
+# De-Tweet
+
+This project aims to develop the decentralized version of social media- Twitter. 
+
+Basic salient features like tweeting, liking a tweet, following other users,creating user profile etc are included in the first release of this project.
+
+The project is built on top of Scaffold-Eth with smart contract developed using Solidity.
+
+Mumbai Test Network : https://detweettest.surge.sh/
+
 # 🏗 Scaffold-ETH
 
 > everything you need to build on Ethereum! 🚀
