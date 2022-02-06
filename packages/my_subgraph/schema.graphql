@@ -1,0 +1,6 @@
+type ExampleEntity @entity {
+  id: ID!
+  index: BigInt!
+  tweet: String! # string
+  address: Bytes! # address
+}
