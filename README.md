@@ -6,6 +6,11 @@ Basic salient features like tweeting, liking a tweet, following other users,crea
 
 The project is built on top of Scaffold-Eth with smart contract developed using Solidity.
 
+The project is live now !!!
+Polygon Mainnet : https://detweet.surge.sh/
+https://polygonscan.com/address/0x10a525436bec826fff329aba278171c4373f8614
+https://polygonscan.com/address/0x10a525436bec826fff329aba278171c4373f8614#code
+
 Mumbai Test Network : https://detweettest.surge.sh/
 
 # 🏗 Scaffold-ETH
