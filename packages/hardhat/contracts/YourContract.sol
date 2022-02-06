@@ -2,6 +2,8 @@ pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
 contract YourContract {
+    event LogTweet(string, address, uint256);
+
     struct tweet {
         string message;
         address owner;
@@ -33,6 +35,7 @@ contract YourContract {
         u.numberOfTweets += 1;
         u.tweetsList.push(numberOfTweets);
         numberOfTweets += 1;
+        emit LogTweet(_message, msg.sender, numberOfTweets-1);
     }
     /** 
      * @dev set user profile name, called by user only
@@ -78,10 +81,17 @@ contract YourContract {
         return a;
     }
     /** 
-     * @dev get likes for a tweet, anyone can call
+     * @dev get followers count for a user, anyone can call
+     * @param _addr user address
+     */
+    function getFollowersCount(address _addr) external view returns(uint256) {
+        return addressToUser[_addr].numberOfFollowers;
+    }
+    /** 
+     * @dev get likers address list for a tweet, anyone can call
      * @param _index tweet index
      */
-    function getLikesList(uint256 _index) external view returns(address[] memory) {
+    function getLikersAddressList(uint256 _index) external view returns(address[] memory) {
         require(_index < numberOfTweets, "invalid Tweet id");
         tweet storage t = tweetsList[_index];
         uint256 len = t.numberOfLikes;
@@ -90,6 +100,21 @@ contract YourContract {
             a[i] = t.idToLikerAddress[i];
         }
         return a;
+    }
+    /** 
+     * @dev get likes count for a tweet, anyone can call
+     * @param _index tweet index
+     */
+    function getLikesCount(uint256 _index) external view returns(uint256) {
+        require(_index < numberOfTweets, "invalid Tweet id");
+        return tweetsList[_index].numberOfLikes;
+    }
+    /** 
+     * @dev get number of tweets for a user, anyone can call
+     * @param _addr address of user
+     */
+    function getNumberOfTweetsbyUser(address _addr) external view returns(uint256) {
+        return addressToUser[_addr].numberOfTweets;
     }
 }
 
