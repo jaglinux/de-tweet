@@ -8,17 +8,19 @@ The project is built on top of Scaffold-Eth with smart contract developed using 
 
 The project is live now !!! 
 
-EthGlobal / Polygon Hackathon Submission details below 
+EthGlobal / Polygon Hackathon Submission details below (date 2/6/2022)
 
-Polygon Mainnet : https://detweet.surge.sh/ 
+## Polygon Mainnet : https://detweet.surge.sh/ 
 
 https://polygonscan.com/address/0x10a525436bec826fff329aba278171c4373f8614 
 
 https://polygonscan.com/address/0x10a525436bec826fff329aba278171c4373f8614#code 
 
-Graph URL https://thegraph.com/hosted-service/subgraph/jaglinux/detweet1 
+## Graph URL https://thegraph.com/hosted-service/subgraph/jaglinux/detweet1 
 
-Mumbai Test Network : https://detweettest.surge.sh/
+## Mumbai Test Network : https://detweettest.surge.sh/
+
+## Rinkeby Test Network : https://rinkeby.etherscan.io/address/0xd0f0b7e4f1fe7472883e1524bbc683395a4f433f#code
 
 # 🏗 Scaffold-ETH
 
