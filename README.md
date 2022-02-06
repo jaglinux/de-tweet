@@ -8,7 +8,7 @@ The project is built on top of Scaffold-Eth with smart contract developed using 
 
 The project is live now !!! 
 
-EthGlobal Hackathon Submission details below 
+EthGlobal / Polygon Hackathon Submission details below 
 
 Polygon Mainnet : https://detweet.surge.sh/
 https://polygonscan.com/address/0x10a525436bec826fff329aba278171c4373f8614
