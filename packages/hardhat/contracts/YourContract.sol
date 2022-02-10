@@ -1,8 +1,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
-contract YourContract {
-    event LogTweet(string, address, uint256);
+contract DeTweet {
+    event LogTweet(uint256, string);
 
     struct tweet {
         string message;
@@ -35,7 +35,7 @@ contract YourContract {
         u.numberOfTweets += 1;
         u.tweetsList.push(numberOfTweets);
         numberOfTweets += 1;
-        emit LogTweet(_message, msg.sender, numberOfTweets-1);
+        emit LogTweet(numberOfTweets-1, _message);
     }
     /** 
      * @dev set user profile name, called by user only
