@@ -1,6 +1,9 @@
 packages/subgraph/subgraph.yaml
 packages/subgraph/generated
 packages/subgraph/abis/*
+packages/my_subgraph/subgraph.yaml
+packages/my_subgraph/generated
+packages/my_subgraph/abis/*
 packages/hardhat/*.txt
 **/aws.json
 
@@ -22,6 +25,7 @@ packages/hardhat-ts/cache
 .secret
 
 packages/subgraph/config/config.json
+packages/my_subgraph/config/config.json
 tenderly.yaml
 
 # dependencies
