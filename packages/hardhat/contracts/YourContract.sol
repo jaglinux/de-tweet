@@ -8,7 +8,7 @@ contract DeTweet {
         string message;
         address owner;
         uint256 numberOfLikes;
-        mapping(address => bool) isLiker;
+        mapping(address => uint256) isLiker;
         mapping(uint256 => address) idToLikerAddress;
     }
     struct user {
@@ -62,11 +62,24 @@ contract DeTweet {
      */
     function LikeTweet(uint256 _index) external {
         tweet storage t = tweetsList[_index];
-        require(t.isLiker[msg.sender] == false, "Already Liked");
-        t.isLiker[msg.sender] = true;
-        t.idToLikerAddress[t.numberOfLikes] = msg.sender;
+        require(t.isLiker[msg.sender] == 0, "Already Liked");
         t.numberOfLikes += 1;
+        uint256 numberOfLikes = t.numberOfLikes;
+        t.isLiker[msg.sender] = numberOfLikes;
+        t.idToLikerAddress[numberOfLikes] = msg.sender;
     }
+    /** 
+     * @dev unlike tweet, called by user only
+     * @param _index tweet index
+     */
+    function UnLikeTweet(uint256 _index) external {
+        tweet storage t = tweetsList[_index];
+        require(t.isLiker[msg.sender] != 0, "Not Liked");
+        t.idToLikerAddress[t.isLiker[msg.sender]] = t.idToLikerAddress[t.numberOfLikes];
+        t.idToLikerAddress[t.numberOfLikes] = address(0);
+        t.isLiker[msg.sender] = 0;
+        t.numberOfLikes -= 1;
+    } 
     /** 
      * @dev get followers for a user, anyone can call
      * @param _addr user address
@@ -97,7 +110,7 @@ contract DeTweet {
         uint256 len = t.numberOfLikes;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
-            a[i] = t.idToLikerAddress[i];
+            a[i] = t.idToLikerAddress[i+1];
         }
         return a;
     }
