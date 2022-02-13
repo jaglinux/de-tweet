@@ -3,6 +3,10 @@ pragma solidity >=0.8.0 <0.9.0;
 
 contract DeTweet {
     event LogTweet(uint256, string);
+    event LogFollower(address);
+    event LogUnFollower(address);
+    event LogLike(uint256);
+    event LogUnLike(uint256);
 
     struct tweet {
         string message;
@@ -57,6 +61,7 @@ contract DeTweet {
         uint256 numberOfFollowers = u.numberOfFollowers;
         u.isFollower[msg.sender] = numberOfFollowers;
         u.idToFollowerAddress[numberOfFollowers] = msg.sender;
+        emit LogFollower(_dest);
     }
     /** 
      * @dev unfollow another user, called by user only
@@ -69,6 +74,7 @@ contract DeTweet {
         u.idToFollowerAddress[u.numberOfFollowers] = address(0);
         u.isFollower[msg.sender] = 0;
         u.numberOfFollowers -= 1;
+        emit LogUnFollower(_dest);
     }
     /** 
      * @dev like tweet, called by user only
@@ -81,6 +87,7 @@ contract DeTweet {
         uint256 numberOfLikes = t.numberOfLikes;
         t.isLiker[msg.sender] = numberOfLikes;
         t.idToLikerAddress[numberOfLikes] = msg.sender;
+        emit LogLike(_index);
     }
     /** 
      * @dev unlike tweet, called by user only
@@ -93,6 +100,7 @@ contract DeTweet {
         t.idToLikerAddress[t.numberOfLikes] = address(0);
         t.isLiker[msg.sender] = 0;
         t.numberOfLikes -= 1;
+        emit LogUnLike(_index);
     } 
     /** 
      * @dev get followers for a user, anyone can call
