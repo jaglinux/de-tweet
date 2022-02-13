@@ -16,7 +16,7 @@ contract DeTweet {
         uint256 numberOfTweets;
         uint256 numberOfFollowers;
         uint256[] tweetsList;
-        mapping(address => bool) isFollower;
+        mapping(address => uint256) isFollower;
         mapping(uint256 => address) idToFollowerAddress;
     }
     mapping(address => user) public addressToUser;
@@ -50,11 +50,25 @@ contract DeTweet {
      * @param _dest follow user address
      */
     function FollowUser(address _dest) external {
+        require(msg.sender != _dest, "Cannot follow self");
         user storage u = addressToUser[_dest];
-        require(u.isFollower[msg.sender] == false, "Already Following");
-        u.isFollower[msg.sender] = true;
-        u.idToFollowerAddress[u.numberOfFollowers] = msg.sender;
+        require(u.isFollower[msg.sender] == 0, "Already Following");
         u.numberOfFollowers += 1;
+        uint256 numberOfFollowers = u.numberOfFollowers;
+        u.isFollower[msg.sender] = numberOfFollowers;
+        u.idToFollowerAddress[numberOfFollowers] = msg.sender;
+    }
+    /** 
+     * @dev unfollow another user, called by user only
+     * @param _dest unfollow user address
+     */
+    function UnFollowUser(address _dest) external {
+        user storage u = addressToUser[_dest];
+        require(u.isFollower[msg.sender] != 0, "Not Following");
+        u.idToFollowerAddress[u.isFollower[msg.sender]] = u.idToFollowerAddress[u.numberOfFollowers];
+        u.idToFollowerAddress[u.numberOfFollowers] = address(0);
+        u.isFollower[msg.sender] = 0;
+        u.numberOfFollowers -= 1;
     }
     /** 
      * @dev like tweet, called by user only
@@ -89,7 +103,7 @@ contract DeTweet {
         uint256 len = u.numberOfFollowers;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
-            a[i] = u.idToFollowerAddress[i];
+            a[i] = u.idToFollowerAddress[i+1];
         }
         return a;
     }
@@ -104,7 +118,7 @@ contract DeTweet {
      * @dev get likers address list for a tweet, anyone can call
      * @param _index tweet index
      */
-    function getLikersAddressList(uint256 _index) external view returns(address[] memory) {
+    function getLikersList(uint256 _index) external view returns(address[] memory) {
         require(_index < numberOfTweets, "invalid Tweet id");
         tweet storage t = tweetsList[_index];
         uint256 len = t.numberOfLikes;
