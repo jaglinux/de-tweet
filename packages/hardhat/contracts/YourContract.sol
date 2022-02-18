@@ -1,7 +1,8 @@
 pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract DeTweet {
+contract DeTweet is ERC721 {
     event LogTweet(uint256, string);
     event LogFollower(address);
     event LogUnFollower(address);
@@ -27,6 +28,8 @@ contract DeTweet {
     mapping(uint256 => tweet) public tweetsList;
     uint256 public numberOfTweets;
 
+    constructor() ERC721("DeTweet", "DET") {
+    }
     /** 
      * @dev Function to tweet, called by user only
      * @param _message tweet message
@@ -40,6 +43,11 @@ contract DeTweet {
         u.tweetsList.push(numberOfTweets);
         numberOfTweets += 1;
         emit LogTweet(numberOfTweets-1, _message);
+    }
+
+    function MintTweet(uint256 _tweetIndex) external {
+        require(tweetsList[_tweetIndex].owner == msg.sender, "only Owner can mint");
+         _mint(msg.sender, _tweetIndex);
     }
     /** 
      * @dev set user profile name, called by user only
