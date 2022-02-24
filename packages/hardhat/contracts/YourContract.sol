@@ -1,6 +1,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {Data} from "./Data.sol";
 
 contract DeTweet is ERC721 {
     event LogTweet(uint256, string);
@@ -9,23 +10,8 @@ contract DeTweet is ERC721 {
     event LogLike(uint256);
     event LogUnLike(uint256);
 
-    struct tweet {
-        string message;
-        address owner;
-        uint256 numberOfLikes;
-        mapping(address => uint256) isLiker;
-        mapping(uint256 => address) idToLikerAddress;
-    }
-    struct user {
-        string name;
-        uint256 numberOfTweets;
-        uint256 numberOfFollowers;
-        uint256[] tweetsList;
-        mapping(address => uint256) isFollower;
-        mapping(uint256 => address) idToFollowerAddress;
-    }
-    mapping(address => user) public addressToUser;
-    mapping(uint256 => tweet) public tweetsList;
+    mapping(address => Data.user) public addressToUser;
+    mapping(uint256 => Data.tweet) public tweetsList;
     uint256 public numberOfTweets;
 
     constructor() ERC721("DeTweet", "DET") {
@@ -35,10 +21,10 @@ contract DeTweet is ERC721 {
      * @param _message tweet message
      */
     function Tweet(string calldata _message) external {
-        tweet storage t = tweetsList[numberOfTweets];
+        Data.tweet storage t = tweetsList[numberOfTweets];
         t.message = _message;
         t.owner = msg.sender;
-        user storage u = addressToUser[msg.sender];
+        Data.user storage u = addressToUser[msg.sender];
         u.numberOfTweets += 1;
         u.tweetsList.push(numberOfTweets);
         numberOfTweets += 1;
@@ -63,7 +49,7 @@ contract DeTweet is ERC721 {
      */
     function FollowUser(address _dest) external {
         require(msg.sender != _dest, "Cannot follow self");
-        user storage u = addressToUser[_dest];
+        Data.user storage u = addressToUser[_dest];
         require(u.isFollower[msg.sender] == 0, "Already Following");
         u.numberOfFollowers += 1;
         uint256 numberOfFollowers = u.numberOfFollowers;
@@ -76,7 +62,7 @@ contract DeTweet is ERC721 {
      * @param _dest unfollow user address
      */
     function UnFollowUser(address _dest) external {
-        user storage u = addressToUser[_dest];
+        Data.user storage u = addressToUser[_dest];
         require(u.isFollower[msg.sender] != 0, "Not Following");
         u.idToFollowerAddress[u.isFollower[msg.sender]] = u.idToFollowerAddress[u.numberOfFollowers];
         u.idToFollowerAddress[u.numberOfFollowers] = address(0);
@@ -89,7 +75,7 @@ contract DeTweet is ERC721 {
      * @param _index tweet index
      */
     function LikeTweet(uint256 _index) external {
-        tweet storage t = tweetsList[_index];
+        Data.tweet storage t = tweetsList[_index];
         require(t.isLiker[msg.sender] == 0, "Already Liked");
         t.numberOfLikes += 1;
         uint256 numberOfLikes = t.numberOfLikes;
@@ -102,7 +88,7 @@ contract DeTweet is ERC721 {
      * @param _index tweet index
      */
     function UnLikeTweet(uint256 _index) external {
-        tweet storage t = tweetsList[_index];
+        Data.tweet storage t = tweetsList[_index];
         require(t.isLiker[msg.sender] != 0, "Not Liked");
         t.idToLikerAddress[t.isLiker[msg.sender]] = t.idToLikerAddress[t.numberOfLikes];
         t.idToLikerAddress[t.numberOfLikes] = address(0);
@@ -115,7 +101,7 @@ contract DeTweet is ERC721 {
      * @param _addr user address
      */
     function getFollowersList(address _addr) external view returns(address[] memory) {
-        user storage u = addressToUser[_addr];
+        Data.user storage u = addressToUser[_addr];
         uint256 len = u.numberOfFollowers;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
@@ -136,7 +122,7 @@ contract DeTweet is ERC721 {
      */
     function getLikersList(uint256 _index) external view returns(address[] memory) {
         require(_index < numberOfTweets, "invalid Tweet id");
-        tweet storage t = tweetsList[_index];
+        Data.tweet storage t = tweetsList[_index];
         uint256 len = t.numberOfLikes;
         address[] memory a = new address[](len);
         for(uint256 i=0; i < len; i++) {
