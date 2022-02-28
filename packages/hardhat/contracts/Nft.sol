@@ -7,7 +7,7 @@ contract Nft is ERC721 {
     constructor(string memory name, string memory symbol ) {
     }
 
-    function MintTweet(Data.tweet storage t) internal {
-        
+    function MintTweet(address _to) internal returns(uint256) {
+        return _mint(_to);
     }
 }

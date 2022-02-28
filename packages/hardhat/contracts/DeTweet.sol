@@ -31,11 +31,12 @@ contract DeTweet is Nft{
         emit LogTweet(numberOfTweets-1, _message);
     }
 
-    function MintTweet(uint256 _tweetIndex) external {
+    function MintTweet(uint256 _tweetIndex) external returns(uint256){
         Data.tweet storage t = tweetsList[_tweetIndex];
         require(t.minted == false, "NFT already minted");
         require(t.owner == msg.sender, "Only Owner can mint");
-        Nft.MintTweet(t);
+        t.minted = true;
+        return Nft.MintTweet(msg.sender);
     }
     /** 
      * @dev set user profile name, called by user only
