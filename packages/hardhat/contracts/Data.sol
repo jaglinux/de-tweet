@@ -6,6 +6,7 @@ library Data {
         string message;
         address owner;
         uint256 numberOfLikes;
+        bool minted;
         mapping(address => uint256) isLiker;
         mapping(uint256 => address) idToLikerAddress;
     }
